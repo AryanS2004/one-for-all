@@ -9,7 +9,7 @@ GEMINI_API_KEY = "AIzaSyChog8HBbu0IlEluONxiZMyIkGrk-gSI1A"
 genai.configure(api_key=GEMINI_API_KEY)
 
 app = Flask(__name__, static_folder=".", static_url_path="")
-CORS(app)
+CORS(app, origins=["https://one-for-all.up.railway.app"])
 
 # ✅ Serve homepage
 @app.route("/")
