@@ -223,7 +223,7 @@
       appendMessage("💬 Thinking...", "bot");
 
       try {
-        const res = await fetch("http://localhost:5000/ask_bot", {
+        const res = await fetch("https://one-for-all-production.up.railway.app/ask_bot", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
