@@ -1,0 +1,247 @@
+/* Reset and Base */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100%;
+  color: white;
+  overflow-x: hidden;  /* ✅ Prevent horizontal scroll */
+}
+
+.background {
+  background: url("hero.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  min-height: 100vh;  /* ✅ Fix white space issue */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75); /* Darken image */
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  color: #ccc;
+}
+
+.quirk-3x3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.quirk {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1.3rem 1rem;
+  border-radius: 15px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  transition: transform 0.3s ease, background 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.quirk:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.center-glow {
+  background: linear-gradient(to right, #00f260, #0575e6);
+  color: #000;
+  box-shadow: 0 0 20px #00f260, 0 0 30px #0575e6;
+}
+
+.tiny {
+  font-size: 0.75rem;
+  font-weight: normal;
+}
+
+.random-term {
+  position: relative;
+  text-align: left;
+  padding-right: 3rem;
+}
+
+/* === Chatbot Specific Fix === */
+.chat-container .input-area {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.chat-container input[type="text"] {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  background-color: #fff;
+  color: #000;
+}
+
+.chat-container button {
+  padding: 0.75rem 1.2rem;
+  background: #00f260;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.chat-container button:hover {
+  background: #0575e6;
+  color: white;
+}
+
+.home-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 0, 0, 0.402);
+  /* border: 2px solid #000000; */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 999;
+}
+
+.home-button:hover {
+  background: rgba(0, 255, 21, 0.402);
+  /* color: black; */
+  box-shadow: 0 0 20px #00f260;
+}
+
+
+.chat-box {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Internet Explorer 10+ */
+}
+
+.chat-box::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari and Opera */
+}
+
+.message.bot ul {
+  padding-left: 1.2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.message.bot li {
+  list-style-type: disc;
+}
+
+.about-link {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border: 2px solid #00f260;
+}
+
+.about-link:hover {
+  background: #00f260;
+  color: black;
+}
+
+/* ============================= */
+/*         RESPONSIVE PART       */
+/* ============================= */
+
+@media (max-width: 1024px) {
+  .quirk-3x3 {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .main-title {
+    font-size: 2.3rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .about-link {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .quirk-3x3 {
+    grid-template-columns: 1fr;
+  }
+
+  .quirk {
+    padding: 1rem;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .chat-container .input-area {
+    flex-direction: column;
+    bottom: 10px;
+  }
+
+  .chat-container button {
+    width: 100%;
+  }
+
+  .about-link {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    top: 10px;
+    right: 10px;
+  }
+}

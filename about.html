@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About | One for All</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    .background {
+      background: url("assets/hero.jpg") no-repeat center center fixed;
+      background-size: cover;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.85);
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .about-container {
+      max-width: 900px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow-y: auto;
+      height: calc(100vh - 6rem);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    h1, h2 {
+      color: #00f260;
+      text-align: center;
+    }
+
+    p {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .tool-list {
+      margin-top: 1rem;
+    }
+
+    .tool {
+      margin-bottom: 1rem;
+    }
+
+    .tool span {
+      font-size: 0.85rem;
+      color: #ccc;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #00f260;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .home-btn:hover {
+      background: #00f260;
+      color: black;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="overlay"></div>
+
+  <a href="index.html" class="home-btn">🏠 Home</a>
+
+  <div class="about-container">
+    <h1>About “One for All”</h1>
+    <p>
+      <strong>One for All</strong> is a free, all-in-one cybersecurity toolkit built with the goal of empowering users to stay safe online.
+      This project was developed as a <strong>solo effort</strong> by a passionate cybersecurity learner, aiming to make protection tools easily available, especially for non-technical users.
+    </p>
+
+    <p>
+      Whether you're concerned about phishing, password strength, online scams, or general digital hygiene—this platform offers tools to detect, prevent, and understand cyber threats in a user-friendly interface.
+    </p>
+
+    <h2>🧰 Tools Included</h2>
+    <div class="tool-list">
+
+      <div class="tool">
+        <strong>🔍 Phishing Detector</strong>
+        <span>Analyzes messages and links to detect phishing content using AI and pattern checks.</span>
+      </div>
+
+      <div class="tool">
+        <strong>✉️ Email Header Analyzer</strong>
+        <span>Extracts hidden email metadata to help trace spoofed or suspicious senders.</span>
+      </div>
+
+      <div class="tool">
+        <strong>📰 Live Scam News</strong>
+        <span>Fetches real-time scam and fraud reports to keep you updated and aware.</span>
+      </div>
+
+      <div class="tool">
+        <strong>📷 QR Safety Checker</strong>
+        <span>Scans QR codes for hidden malicious links before you open them.</span>
+      </div>
+
+      <div class="tool">
+        <strong>🗨️ Heiwa Chat</strong>
+        <span>A cyberbullying-free chat app using NLP-based moderation to keep conversations respectful.</span>
+      </div>
+
+      <div class="tool">
+        <strong>🔐 Password Checker</strong>
+        <span>Checks password strength and tells if it's part of known data breaches.</span>
+      </div>
+
+      <div class="tool">
+        <strong>🌐 Domain Spoof Checker</strong>
+        <span>Inspects SPF and DMARC records of domains to check for spoofing vulnerabilities.</span>
+      </div>
+
+      <div class="tool">
+        <strong>🛡️ Ultra Guard – Cyber Safety ChatBot</strong>
+        <span>An AI chatbot that answers cybersecurity-related queries based on your country and safety needs.</span>
+      </div>
+
+      <div class="tool">
+        <strong>📘 Cybersecurity Dictionary</strong>
+        <span>150+ beginner-friendly terms with simple explanations and audio support.</span>
+      </div>
+
+    </div>
+
+    <h2>🔐 Privacy First</h2>
+    <p>
+      None of your personal data is stored or shared. The tools run either locally or via secure API connections. Your privacy and safety are the top priorities.
+    </p>
+
+    <h2>🚀 Motivation</h2>
+    <p>
+      This project was inspired by a vision to make the internet safer for everyone—students, parents, professionals—by offering free, accessible, and powerful cybersecurity tools in one place.
+    </p>
+
+    <p style="text-align: center;">Built with 💻, ☕, and a passion for a safer web.</p>
+  </div>
+</body>
+</html>

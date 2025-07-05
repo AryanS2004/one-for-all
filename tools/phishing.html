@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phishing Detector | One for All</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <style>
+    *, *::before, *::after {
+  box-sizing: border-box;
+}
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: url("../assets/hero.jpg") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.75);
+      z-index: -1;
+    }
+
+    .tool-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 6rem 1rem 4rem;
+      text-align: center;
+      color: white;
+    }
+
+    input[type="text"], textarea {
+      padding: 0.75rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      margin: 1rem 0;
+      background: #111;
+      color: #0f0;
+      border: 1px solid #0f0;
+    }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      background: #00f260;
+      color: #000;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin: 0.5rem;
+    }
+
+    button:hover {
+      background: #0575e6;
+      color: #fff;
+    }
+
+    .result-box {
+      margin-top: 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 1rem;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+
+    .safe {
+      background-color: rgba(0, 255, 0, 0.1);
+      color: #00ff88;
+    }
+
+    .suspicious {
+      background-color: rgba(255, 255, 0, 0.1);
+      color: #ffff66;
+    }
+
+    .malicious {
+      background-color: rgba(255, 0, 0, 0.1);
+      color: #ff6666;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background & Overlay fixed -->
+  <div class="background"></div>
+  <div class="overlay"></div>
+  <a href="../index.html" class="home-button">🏠 Home</a>
+
+  <!-- Main Tool Content -->
+  <div class="tool-container">
+    <h1>🧠 Phishing Detector</h1>
+    <p>Enter a URL and/or suspicious message text to detect phishing activity</p>
+    
+    <input type="text" id="urlInput" placeholder="https://example.com" />
+    <textarea id="textInput" placeholder="Paste message or email content here (optional)"></textarea>
+    
+    <br />
+    <button onclick="checkPhishing()">Scan Now</button>
+    <button onclick="clearInputs()">Clear</button>
+
+    <div id="result" class="result-box">🔍 Analysis will appear here...</div>
+  </div>
+
+  <!-- Script Logic -->
+  <script>
+    const API_KEY = "AIzaSyDVK-42iBBAB8ULYBR9PhIxJmDHKVIwdjs"; // Replace if needed
+
+    const textPatterns = [
+      "your account has been suspended",
+      "click here to verify",
+      "update your information",
+      "urgent action required",
+      "you have won",
+      "confirm your password",
+      "bank account",
+      "reset your credentials",
+      "unusual activity",
+      "verify now"
+    ];
+
+    function checkTextForPhishing(text) {
+      let score = 0;
+      const lower = text.toLowerCase();
+      textPatterns.forEach(p => {
+        if (lower.includes(p)) score++;
+      });
+      return score;
+    }
+
+    function applyHeuristicScan(url) {
+      const lower = url.toLowerCase();
+      const badPatterns = [
+        "login", "verify", "account", "secure", "update", "bank",
+        "free", "win", "confirm", "claim", "@", "bit.ly", "tinyurl"
+      ];
+      const suspiciousTLDs = [".ru", ".tk", ".ml", ".ga", ".cf"];
+      let score = 0;
+
+      badPatterns.forEach(keyword => {
+        if (lower.includes(keyword)) score += 1;
+      });
+      if (/https?:\/\/\d+\.\d+\.\d+\.\d+/.test(url)) score += 2;
+      suspiciousTLDs.forEach(tld => {
+        if (lower.endsWith(tld)) score += 1;
+      });
+
+      return score;
+    }
+
+    async function checkPhishing() {
+      const url = document.getElementById("urlInput").value.trim();
+      const text = document.getElementById("textInput").value.trim();
+      const resultBox = document.getElementById("result");
+      resultBox.innerText = "🔍 Scanning...";
+      resultBox.className = "result-box";
+
+      let finalResult = "";
+      let totalScore = 0;
+
+      if (url) {
+        const heuristicScore = applyHeuristicScan(url);
+        totalScore += heuristicScore;
+
+        try {
+          const requestBody = {
+            client: { clientId: "oneforall", clientVersion: "1.0" },
+            threatInfo: {
+              threatTypes: ["MALWARE", "SOCIAL_ENGINEERING"],
+              platformTypes: ["ANY_PLATFORM"],
+              threatEntryTypes: ["URL"],
+              threatEntries: [{ url }]
+            }
+          };
+
+          const response = await fetch(
+            `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`,
+            {
+              method: "POST",
+              body: JSON.stringify(requestBody),
+              headers: { "Content-Type": "application/json" }
+            }
+          );
+          const data = await response.json();
+
+          if (data && data.matches && data.matches.length > 0) {
+            finalResult += `🚨 Google API marked this URL as MALICIOUS.\n`;
+            resultBox.classList.add("malicious");
+          } else if (heuristicScore >= 4) {
+            finalResult += `⚠️ Heuristic scan: Highly suspicious URL.\n`;
+            resultBox.classList.add("malicious");
+          } else if (heuristicScore >= 2) {
+            finalResult += `⚠️ Heuristic scan: Possibly suspicious URL.\n`;
+            resultBox.classList.add("suspicious");
+          } else {
+            finalResult += `✅ URL looks safe.\n`;
+            resultBox.classList.add("safe");
+          }
+        } catch (err) {
+          finalResult += "⚠️ Google API check failed.\n";
+        }
+      }
+
+      if (text) {
+        const textScore = checkTextForPhishing(text);
+        totalScore += textScore;
+
+        if (textScore >= 4) {
+          finalResult += `🚨 Message text is highly suspicious.\n`;
+          resultBox.classList.add("malicious");
+        } else if (textScore >= 2) {
+          finalResult += `⚠️ Message may contain phishing patterns.\n`;
+          resultBox.classList.add("suspicious");
+        } else {
+          finalResult += `✅ Message text looks clean.\n`;
+        }
+      }
+
+      if (!url && !text) {
+        resultBox.innerText = "⚠️ Please enter a URL or message text.";
+        return;
+      }
+
+      resultBox.innerText = finalResult || "✅ No phishing patterns detected.";
+    }
+
+    function clearInputs() {
+      document.getElementById("urlInput").value = "";
+      document.getElementById("textInput").value = "";
+      const resultBox = document.getElementById("result");
+      resultBox.innerText = "🔍 Analysis will appear here...";
+      resultBox.className = "result-box";
+    }
+  </script>
+</body>
+</html>

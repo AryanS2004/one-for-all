@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Domain Spoof Checker | One for All</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .background {
+      background: url("../assets/hero.jpg") no-repeat center center fixed;
+      background-size: cover;
+      position: fixed;
+      width: 100%;
+      min-height: 100vh;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      background-color: rgba(0, 0, 0, 0.8);
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 5.5rem auto 3rem auto;
+      text-align: center;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2rem;
+      padding-bottom: 3rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      box-sizing: border-box;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    input {
+      width: 80%;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #00f260;
+      color: black;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background: #0575e6;
+      color: white;
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+
+    .loading {
+      color: yellow;
+      font-style: italic;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 15% 1rem;
+        margin-top: 5rem;
+        padding: 1.5rem;
+      }
+
+      input, button {
+        width: 100%;
+        font-size: 0.95rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="overlay"></div>
+  <a href="../index.html" class="home-button">🏠 Home</a>
+  
+
+  <div class="container">
+    <h1>🔍 Domain Spoof Checker</h1>
+    <input type="text" id="domainInput" placeholder="Enter domain (e.g., example.com)" />
+    <br />
+    <button onclick="checkDomainSpoof()">Check</button>
+
+    <div class="result" id="resultBox" style="display:none;">
+      <div class="loading" id="loading" style="display:none;">⏳ Checking records...</div>
+      <p id="resultText"></p>
+      <p id="summaryText" style="margin-top: 1rem; font-weight: bold;"></p>
+      <p id="explanationText" style="margin-top: 0.5rem; font-size: 0.9rem;"></p>
+    </div>
+  </div>
+
+  <script>
+    async function checkDomainSpoof() {
+      const domain = document.getElementById("domainInput").value.trim();
+      const resultBox = document.getElementById("resultBox");
+      const resultText = document.getElementById("resultText");
+      const loading = document.getElementById("loading");
+      const summary = document.getElementById("summaryText");
+      const explanation = document.getElementById("explanationText");
+
+      if (!domain) {
+        resultText.innerHTML = "⚠️ Please enter a domain name.";
+        resultBox.style.display = "block";
+        return;
+      }
+
+      resultBox.style.display = "block";
+      resultText.innerHTML = "";
+      summary.innerHTML = "";
+      explanation.innerHTML = "";
+      loading.style.display = "block";
+
+      try {
+        const res = await fetch(`http://localhost:5000/check_spoof?domain=${domain}`);
+        const data = await res.json();
+        loading.style.display = "none";
+
+        const spf = data.spf || "❌ No SPF record found.";
+        const dmarc = data.dmarc || "❌ No DMARC record found.";
+
+        resultText.innerHTML = `🔐 <strong>SPF Record:</strong><br>${spf}<br><br>🛡️ <strong>DMARC Record:</strong><br>${dmarc}`;
+
+        let isSafe = true;
+        if (!data.spf || !data.dmarc) {
+          isSafe = false;
+        }
+
+        summary.innerHTML = isSafe
+          ? "✅ <strong>This domain is properly protected against spoofing attempts.</strong>"
+          : "⚠️ <strong>This domain might be vulnerable to spoofing. It is missing SPF or DMARC records.</strong>";
+
+        explanation.innerHTML = `
+          <strong>What is SPF?</strong><br>
+          SPF (Sender Policy Framework) tells email providers which servers are allowed to send emails for this domain. It helps prevent fake emails from being sent in the domain’s name.<br><br>
+          
+          <strong>What is DMARC?</strong><br>
+          DMARC (Domain-based Message Authentication, Reporting, and Conformance) works with SPF and tells the receiving email server what to do if a suspicious email is detected — like reject or quarantine it. It also reports these incidents back to the domain owner.<br><br>
+
+          <strong>Why does this matter?</strong><br>
+          Without SPF and DMARC, scammers can send emails pretending to be from this domain — which is known as email spoofing. Having both makes the domain more secure.
+        `;
+      } catch (err) {
+        loading.style.display = "none";
+        resultText.innerHTML = "❌ Failed to fetch domain info.";
+        summary.innerHTML = "";
+        explanation.innerHTML = "";
+      }
+    }
+  </script>
+</body>
+</html>
