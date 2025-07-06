@@ -436,4 +436,19 @@ const terms = [
   definition: "A phishing attack that targets high-profile individuals like executives.",
   eli5: "It’s like going after the big fish instead of the small ones."
 },
+{
+  term: "Hacker",
+  definition: "A hacker is a person who uses technical skills to gain unauthorized access to systems, networks, or data. Hackers can be malicious (black hat), ethical (white hat), or fall somewhere in between (gray hat).",
+  eli5: "A hacker is like someone who figures out how to sneak into places they’re not supposed to — like picking a lock on a door. Some hackers are bad, but some are good and help keep things safe."
+},
+{
+  term: "Virus",
+  definition: "A virus is a type of malicious software (malware) that attaches itself to programs or files and spreads from one computer to another, often damaging data or disrupting operations.",
+  eli5: "A virus is like a bad bug for computers. Once it gets inside, it can spread and make your computer sick or act weird, just like a real-life virus makes people sick."
+},
+{
+  term: "Cyberbullying",
+  definition: "Cyberbullying is the act of harassing, threatening, or embarrassing someone through digital platforms such as social media, messaging apps, or online forums.",
+  eli5: "Cyberbullying is like being mean to someone on the internet — sending hurtful messages or making fun of them online, which can really hurt their feelings."
+},   
 ];
