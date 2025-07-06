@@ -74,6 +74,49 @@ def check_spoof():
 
     return jsonify(result)
 
+# ✅ Email Header Analyzer endpoint (🆕 added)
+@app.route("/parse_header", methods=["POST"])
+def parse_header():
+    header_text = request.json.get("header")
+    if not header_text:
+        return jsonify({"error": "No header provided."})
+
+    lines = header_text.strip().split("\n")
+    headers = {}
+    for line in lines:
+        if ":" in line:
+            key, value = line.split(":", 1)
+            headers[key.strip()] = value.strip()
+
+    header_info = {
+        "From": headers.get("From"),
+        "To": headers.get("To"),
+        "Subject": headers.get("Subject"),
+        "Date": headers.get("Date"),
+        "Reply-To": headers.get("Reply-To"),
+        "Mailed-By": headers.get("mailed-by") or headers.get("Mailed-By") or headers.get("X-Mailer"),
+        "Signed-By": headers.get("signed-by") or headers.get("Signed-By"),
+        "Security": headers.get("security") or headers.get("Security"),
+    }
+
+    flags = []
+    if not headers.get("From"):
+        flags.append("Missing From field")
+    if not headers.get("Signed-By"):
+        flags.append("Unsigned email")
+    if headers.get("Mailed-By") and "gmail" not in headers.get("Mailed-By", "").lower():
+        flags.append("Suspicious Mailer")
+
+    summary = "This email seems authentic based on the available headers."
+    if flags:
+        summary = "This email might be suspicious based on the header analysis."
+
+    return jsonify({
+        "header_info": header_info,
+        "flags": flags,
+        "summary": summary
+    })
+
 # ✅ RSS Feed Proxy (to fix CORS error in news.html)
 @app.route("/fetch_feed")
 def fetch_feed():
